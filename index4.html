@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Mascotas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f6f9; text-align: center; }
+        .cabecera-simple { display: flex; justify-content: space-between; align-items: center; width: 90%; margin: 20px auto 10px; }
+        .cabecera-simple h1 { margin: 0; font-size: 24px; color: #2c3e50; }
+        .btn-cart { background-color: #e67e22; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .contenedor { width: 90%; margin: 10px auto 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .item { background: white; border: 1px solid #ccc; padding: 10px; width: 200px; border-radius: 5px; }
+        .item img { width: 100%; height: 120px; object-fit: cover; }
+        .item button { background-color: #2980b9; color: white; border: none; padding: 8px; width: 100%; cursor: pointer; border-radius: 3px; font-weight: bold; }
+        .modal-fondo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 20; }
+        .modal, .carrito-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; display: none; width: 280px; box-shadow: 0 0 10px rgba(0,0,0,0.3); z-index: 30; }
+        .carrito-modal { width: 320px; text-align: left; }
+        .modal img { width: 100%; height: 140px; object-fit: cover; }
+        .btn-add { background-color: #27ae60; color: white; border: none; padding: 8px; width: 100%; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-close { background-color: #e74c3c; color: white; border: none; padding: 5px; width: 100%; cursor: pointer; margin-top: 5px; }
+        .btn-quitar { background-color: #c0392b; color: white; border: none; padding: 5px; width: 100%; cursor: pointer; margin-top: 5px; font-weight: bold; }
+        .btn-qty { background-color: #7f8c8d; color: white; border: none; padding: 1px 6px; cursor: pointer; border-radius: 3px; font-weight: bold; margin: 0 5px; }
+        #lista-cart li { margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+    <div class="cabecera-simple">
+        <h1>Artículos para Mascotas</h1>
+        <button class="btn-cart" onclick="mostrarCarrito()">🛒 Carrito (<span id="cant-cart">0</span>)</button>
+    </div>
+
+    <div class="contenedor">
+        <div class="item"><img src="camaperro.jpg"><h3>Cama para Perro</h3><p>S/ 85.00</p><button onclick="verProducto('Cama para Perro', 85, 'camaperro.jpg')">Comprar</button></div>
+        <div class="item"><img src="juguetesgato.jpg"><h3>Juguetes para Gato</h3><p>S/ 35.00</p><button onclick="verProducto('Juguetes para Gato', 35, 'juguetesgato.jpg')">Comprar</button></div>
+        <div class="item"><img src="perro.png"><h3>Alimento Premium</h3><p>S/ 110.00</p><button onclick="verProducto('Alimento Premium', 110, 'perro.png')">Comprar</button></div>
+        <div class="item"><img src="mordedorperro.jpg"><h3>Mordedor Dental</h3><p>S/ 25.00</p><button onclick="verProducto('Mordedor Dental', 25, 'mordedorperro.jpg')">Comprar</button></div>
+        <div class="item"><img src="plato.jpg"><h3>Plato Doble Ergonómico</h3><p>S/ 45.00</p><button onclick="verProducto('Plato Doble Ergonómico', 45, 'plato.jpg')">Comprar</button></div>
+        <div class="item"><img src="rascador.jpg"><h3>Rascador Tazón Cama</h3><p>S/ 60.00</p><button onclick="verProducto('Rascador Tazón Cama', 60, 'rascador.jpg')">Comprar</button></div>
+        <div class="item"><img src="collar.jpg"><h3>Collar de Entrenador</h3><p>S/ 75.00</p><button onclick="verProducto('Collar de Entrenador', 75, 'collar.jpg')">Comprar</button></div>
+        <div class="item"><img src="ratones.jpg"><h3>Ratones de Peluche</h3><p>S/ 15.00</p><button onclick="verProducto('Ratones de Peluche', 15, 'ratones.jpg')">Comprar</button></div>
+        <div class="item"><img src="comida.jpg"><h3>Alimento Perros Adultos</h3><p>S/ 95.00</p><button onclick="verProducto('Alimento Perros Adultos', 95, 'comida.jpg')">Comprar</button></div>
+        <div class="item"><img src="eleva.jpg"><h3>Comedero Cerámica Eleva</h3><p>S/ 40.00</p><button onclick="verProducto('Comedero Cerámica Eleva', 40, 'eleva.jpg')">Comprar</button></div>
+        <div class="item"><img src="camaperro.jpg"><h3>Cama Elevada Madera</h3><p>S/ 120.00</p><button onclick="verProducto('Cama Elevada Madera', 120, 'camaperro.jpg')">Comprar</button></div>
+        <div class="item"><img src="collar.jpg"><h3>Collar Ajustable Reflectivo</h3><p>S/ 30.00</p><button onclick="verProducto('Collar Ajustable Reflectivo', 30, 'collar.jpg')">Comprar</button></div>
+        <div class="item"><img src="arena.jpg"><h3>Bandeja Sanitaria Mediana</h3><p>S/ 32.00</p><button onclick="verProducto('Bandeja Sanitaria Mediana', 32, 'arena.jpg')">Comprar</button></div>
+        <div class="item"><img src="pack.png"><h3>Pack Juguetes Interactivos</h3><p>S/ 42.00</p><button onclick="verProducto('Pack Juguetes Interactivos', 42, 'pack.png')">Comprar</button></div>
+    </div>
+
+    <div id="fondo" class="modal-fondo"></div>
+
+    <div id="modal-prod" class="modal">
+        <img id="m-img" src=""><h3 id="m-nombre"></h3><p id="m-precio"></p>
+        <button class="btn-add" onclick="agregar()">Añadir al Carrito</button>
+        <button class="btn-close" onclick="cerrar()">Cancelar</button>
+    </div>
+
+    <div id="modal-cart" class="carrito-modal">
+        <h3>Tu Carrito</h3>
+        <ul id="lista-cart"></ul>
+        <p><strong>Total: S/ <span id="total">0</span>.00</strong></p>
+        <button class="btn-close" onclick="cerrar()">Cerrar</button>
+        <button class="btn-quitar" onclick="quitarProducto()">Quitar Producto</button>
+    </div>
+
+    <script>
+        var productoActual, precioActual, totalPrecio = 0, cantidadTotal = 0;
+
+        function verProducto(nombre, precio, img) {
+            productoActual = nombre; precioActual = precio;
+            document.getElementById('m-nombre').innerText = nombre;
+            document.getElementById('m-precio').innerText = "S/ " + precio + ".00";
+            document.getElementById('m-img').src = img;
+            document.getElementById('fondo').style.display = document.getElementById('modal-prod').style.display = 'block';
+        }
+
+        function agregar() {
+            var item = document.createElement('li');
+            item.setAttribute('data-precio', precioActual);
+            item.setAttribute('data-cantidad', 1);
+            item.innerHTML = `<span>${productoActual}</span><div><button class="btn-qty" onclick="cambiarQty(this, -1)">-</button><span class="n-qty">1</span><button class="btn-qty" onclick="cambiarQty(this, 1)">+</button></div>`;
+            document.getElementById('lista-cart').appendChild(item);
+
+            totalPrecio += precioActual; cantidadTotal++;
+            actualizar(); cerrar();
+        }
+//- +
+        function cambiarQty(btn, cambio) {
+            var li = btn.parentElement.parentElement;
+            var precio = parseInt(li.getAttribute('data-precio'));
+            var cant = parseInt(li.getAttribute('data-cantidad')) + cambio;
+            
+            if (cant < 1) return;
+            
+            li.setAttribute('data-cantidad', cant);
+            li.querySelector('.n-qty').innerText = cant;
+            totalPrecio += (precio * cambio); cantidadTotal += cambio;
+            actualizar();
+        }
+
+        function quitarProducto() {
+            var lista = document.getElementById('lista-cart');
+            if (lista.children.length > 0) {
+                var ultimo = lista.lastElementChild;
+                totalPrecio -= (parseInt(ultimo.getAttribute('data-precio')) * parseInt(ultimo.getAttribute('data-cantidad')));
+                cantidadTotal -= parseInt(ultimo.getAttribute('data-cantidad'));
+                ultimo.remove(); actualizar();
+            }
+        }
+//numeros finales
+        function actualizar() {
+            document.getElementById('total').innerText = totalPrecio;
+            document.getElementById('cant-cart').innerText = cantidadTotal;
+        }
+//ventana
+        function mostrarCarrito() {
+            document.getElementById('fondo').style.display = document.getElementById('modal-cart').style.display = 'block';
+        }
+//cerra ventan
+        function cerrar() {
+            document.getElementById('fondo').style.display = document.getElementById('modal-prod').style.display = document.getElementById('modal-cart').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
